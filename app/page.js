@@ -269,7 +269,7 @@ export default function WeddingInvitation() {
           </div>
         </section>
 
-        {/* GALLERY */}
+        {/* GALLERYYY */}
         <section className={`${styles.section} ${styles.revealSection}`}>
           <span className={styles.accentLabel}>Our Moments</span>
           <h2 className={styles.sectionTitle}>Captured Love</h2>
@@ -332,7 +332,7 @@ export default function WeddingInvitation() {
               Save the Details
             </button>
             <p className={styles.buttonHint}>
-              Opens a mobile-friendly view to screenshot
+              Opens details to screenshot
             </p>
           </div>
         </section>
