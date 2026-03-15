@@ -195,7 +195,7 @@ export default function WeddingInvitation() {
                 <h2 className={styles.scriptName}>Aram &amp; Eliz</h2>
                 <div className={styles.letterRule} />
                 <p className={styles.dateText}>May 26 · 2026</p>
-                <p className={styles.venueText}>Lazarus Restaurant, Yerevan</p>
+                <p className={styles.venueText}>Lazur Restaurant, Yerevan</p>
                 <p className={styles.tapText}>
                   {phase === "idle" ? "✦  Tap to Open  ✦" : "Opening…"}
                 </p>
@@ -303,7 +303,7 @@ export default function WeddingInvitation() {
               {
                 icon: "◇",
                 head: "Where",
-                lines: ["Lazaurs Restaurant", "Yerevan, Armenia"],
+                lines: ["Lazur Restaurant", "Yerevan, Armenia"],
               },
               {
                 icon: "◇",
@@ -375,7 +375,7 @@ export default function WeddingInvitation() {
             <p className={styles.modalSubtitle}>Thursday · May 26 · 2026</p>
             <div className={styles.modalDetails}>
               <h3>Location</h3>
-              <p>Lazarus Restaurant</p>
+              <p>Lazur Restaurant</p>
               <p>Yerevan, Armenia</p>
               <h3 style={{ marginTop: "28px" }}>Schedule</h3>
               <p>16:00 — Ceremony</p>
