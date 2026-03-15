@@ -274,7 +274,7 @@ export default function WeddingInvitation() {
           <span className={styles.accentLabel}>Our Moments</span>
           <h2 className={styles.sectionTitle}>Captured Love</h2>
           <div className={styles.gallery} onContextMenu={preventSave}>
-            {["/1.JPG", "/4.JPG", "/5.JPG"].map((src, i) => (
+            {["/1.JPG", "/4.jpg", "/5.JPG"].map((src, i) => (
               <div
                 key={src}
                 className={[
