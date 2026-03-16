@@ -479,10 +479,7 @@ export default function WeddingInvitation() {
             ))}
           </p>
 
-          <a href="tel:+37410052026" className={styles.rsvpPhoneLink}>
-            <BsTelephone size={18} />
-            <span>+374 10 052 026</span>
-          </a>
+        
 
 
           <div className={styles.rsvpTopRule} style={{ marginTop: "3.5rem" }}>
