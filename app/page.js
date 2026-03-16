@@ -55,7 +55,7 @@ const T = {
     rsvpTitle: "Will You Join Us?",
     rsvpDeadline: "Please respond by May 10, 2026",
     rsvpBody:
-      "Your presence would mean a lot to us.\nTo confirm your attendance, please call us:",
+      "Your presence would mean a lot to us.\n",
     rsvpNote: "Please let us know the number of guests attending.",
     footerScript: "We can't wait to celebrate with you",
     langToggle: "ՀԱՅ",
@@ -101,7 +101,7 @@ const T = {
     rsvpTitle: "Կգա՞ք Մեզ Հետ կիսելու այս պահը",
     rsvpDeadline: "Խնդրում ենք պատասխանել մինչև Մայիս 10, 2026",
     rsvpBody:
-      "Ձեր ներկայությունը մեզ համար անգնահատելի կլինի։\nՄասնակցությունը հաստատելու համար զանգահարեք մեզ.",
+      "Ձեր ներկայությունը մեզ համար անգնահատելի կլինի։\n",
     rsvpNote: "Խնդրում ենք նշել հյուրերի քանակը։",
     footerScript: "Անհամբեր սպասում ենք ձեզ",
     langToggle: "ENG",
