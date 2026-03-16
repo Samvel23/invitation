@@ -2,40 +2,155 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./page.module.css";
+import {
+  BsCalendar3,
+  BsGeoAlt,
+  BsClock,
+  BsTelephone,
+  BsSuitHeart,
+  BsSuitHeartFill,
+} from "react-icons/bs";
+import { PiDressLight, PiMusicNoteLight } from "react-icons/pi";
+import { LuCalendarHeart } from "react-icons/lu";
 
-/* ─── Countdown helper ─── */
+/* ─────────────────────────────────────────
+   TRANSLATIONS  (no Armenian in keys!)
+───────────────────────────────────────── */
+const T = {
+  en: {
+    eyebrow: "May 26 · 2026 · Yerevan",
+    heroDesc: "Join us for a day of love, laughter, and celebration",
+    countdownLabel: "Until the Big Day",
+    cdUnits: ["Days", "Hours", "Minutes", "Seconds"],
+    momentsLabel: "Our Moments",
+    momentsTitle: "Captured Love",
+    dresscodeLabel: "Dress Code",
+    dresscodeText: "Formal · Elegant",
+    dresscodeNote: "Black tie or formal evening attire",
+    detailsLabel: "The Details",
+    detailsTitle: "Everything You Need to Know",
+    cards: [
+      {
+        head: "Date & Time",
+        lines: ["Tuesday, May 26, 2026", "Ceremony begins at 16:00"],
+        sub: "Save the date",
+      },
+      {
+        head: "Venue",
+        lines: ["Lazur Restaurant", "Yerevan, Armenia"],
+        sub: "We can't wait to see you there",
+      },
+      {
+        head: "Schedule",
+        lines: [
+          "16:00 — Ceremony",
+          "17:30 — Dinner & Dance",
+        ],
+        sub: "An evening to remember",
+      },
+    ],
+    saveDetails: "Save the Details",
+    saveHint: "Opens details to screenshot",
+    rsvpLabel: "Kindly Reply",
+    rsvpTitle: "Will You Join Us?",
+    rsvpDeadline: "Please respond by May 10, 2026",
+    rsvpBody:
+      "Your presence would mean a lot to us.\nTo confirm your attendance, please call us:",
+    rsvpNote: "Please let us know the number of guests attending.",
+    footerScript: "We can't wait to celebrate with you",
+    langToggle: "ՀԱՅ",
+  },
+  hy: {
+    eyebrow: "Մայիս 26 · 2026 · Երևան",
+    heroDesc: "Հրավիրում ենք կիսվել մեր ուրախությամբ",
+    countdownLabel: "Մինչև Մեծ Օրը",
+    cdUnits: ["Օր", "Ժամ", "Րոպե", "Վայրկյան"],
+    momentsLabel: "Մեր Պահերը",
+    momentsTitle: "Լուսանկարներ",
+    dresscodeLabel: "Հագուստի Կոդ",
+    dresscodeText: "Պաշտոնական · Էլեգանտ",
+    dresscodeNote: "Գիշերային պաշտոնական հագուստ",
+    detailsLabel: "Մանրամասները",
+    detailsTitle: "Ամեն ինչ, ինչ ձեզ հարկավոր է իմանալ",
+    cards: [
+      {
+        head: "Ամսաթիվ և Ժամ",
+        lines: [
+          "Երեքշաբթի, Մայիս 26, 2026",
+          "Արարողությունը սկսվում է 16:00-ին",
+        ],
+        sub: "Նշեք ամսաթիվը",
+      },
+      {
+        head: "Վայրը",
+        lines: ["Լազուր Ռեստորան", "Երևան, Հայաստան"],
+        sub: "Անհամբեր սպասում ենք ձեզ",
+      },
+      {
+        head: "Ժամանակացույց",
+        lines: [
+          "16:00 — Արարողություն",
+          "17:30 — Ընթրիք & Պար",
+        ],
+        sub: "Անմոռանալի երեկո",
+      },
+    ],
+    saveDetails: "Պահպանել Մանրամասները",
+    saveHint: "Բացում է էկրանի նկարի համար",
+    rsvpLabel: "Հաստատեք Ներկայությունը",
+    rsvpTitle: "Կգա՞ք Մեզ Հետ կիսելու այս պահը",
+    rsvpDeadline: "Խնդրում ենք պատասխանել մինչև Մայիս 10, 2026",
+    rsvpBody:
+      "Ձեր ներկայությունը մեզ համար անգնահատելի կլինի։\nՄասնակցությունը հաստատելու համար զանգահարեք մեզ.",
+    rsvpNote: "Խնդրում ենք նշել հյուրերի քանակը։",
+    footerScript: "Անհամբեր սպասում ենք ձեզ",
+    langToggle: "ENG",
+  },
+};
+
+/* ─────────────────────────────────────────
+   COUNTDOWN
+───────────────────────────────────────── */
 function useCountdown(targetDate) {
-  const calc = () => {
+  const calc = useCallback(() => {
     const diff = new Date(targetDate) - new Date();
-    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    return {
-      days: Math.floor(diff / 86400000),
-      hours: Math.floor((diff % 86400000) / 3600000),
-      minutes: Math.floor((diff % 3600000) / 60000),
-      seconds: Math.floor((diff % 60000) / 1000),
-    };
-  };
+    if (diff <= 0) return [0, 0, 0, 0];
+    return [
+      Math.floor(diff / 86400000),
+      Math.floor((diff % 86400000) / 3600000),
+      Math.floor((diff % 3600000) / 60000),
+      Math.floor((diff % 60000) / 1000),
+    ];
+  }, [targetDate]);
+
   const [time, setTime] = useState(calc);
   useEffect(() => {
     const id = setInterval(() => setTime(calc()), 1000);
     return () => clearInterval(id);
-  }, []);
-  return time;
+  }, [calc]);
+  return time; // array [days, hours, minutes, seconds]
 }
 
-export default function WeddingInvitation() {
-  const [phase, setPhase] = useState("idle"); // idle | cracking | opening | rising | revealing | done
-  const [showModal, setShowModal] = useState(false);
+/* card icons — stable, not translated */
+const CARD_ICONS = [BsCalendar3, BsGeoAlt, BsClock];
 
-  /* ── music ── */
+/* ─────────────────────────────────────────
+   COMPONENT
+───────────────────────────────────────── */
+export default function WeddingInvitation() {
+  const [phase, setPhase] = useState("idle");
+  const [showModal, setShowModal] = useState(false);
+  const [lang, setLang] = useState("en");
+
+  const t = T[lang];
+
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [musicReady, setMusicReady] = useState(false);
 
-  /* ── countdown to May 26 2026 16:00 Yerevan (UTC+4 = 12:00 UTC) ── */
-  const countdown = useCountdown("2026-05-26T12:00:00Z");
+  // countdown returns a stable array — keys never change
+  const cdValues = useCountdown("2026-05-26T12:00:00Z");
 
-  /* ── Init audio ── */
   useEffect(() => {
     const audio = new Audio("/music.mp3");
     audio.loop = true;
@@ -51,44 +166,46 @@ export default function WeddingInvitation() {
   }, []);
 
   const toggleMusic = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const a = audioRef.current;
+    if (!a) return;
     if (playing) {
-      audio.pause();
+      a.pause();
       setPlaying(false);
     } else {
-      audio.play().catch(() => {});
+      a.play().catch(() => {});
       setPlaying(true);
     }
   }, [playing]);
 
-  /* ── Auto-play when site reveals ── */
   useEffect(() => {
-    if (phase === "done" && audioRef.current && musicReady) {
+    if (phase === "done" && audioRef.current && musicReady)
       audioRef.current
         .play()
         .then(() => setPlaying(true))
         .catch(() => {});
-    }
   }, [phase, musicReady]);
 
-  /* ── Scroll-reveal ── */
+  /* scroll reveal — re-run when lang changes so newly visible text gets observed */
   useEffect(() => {
     if (phase !== "done") return;
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add(styles.visible);
-        }),
-      { threshold: 0.12 },
-    );
-    document
-      .querySelectorAll(`.${styles.revealSection}`)
-      .forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [phase]);
+    // small delay so React finishes re-rendering translated text first
+    const t = setTimeout(() => {
+      const obs = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add(styles.visible);
+          }),
+        { threshold: 0.08 },
+      );
+      document
+        .querySelectorAll(`.${styles.revealSection}`)
+        .forEach((el) => obs.observe(el));
+      return () => obs.disconnect();
+    }, 50);
+    return () => clearTimeout(t);
+  }, [phase, lang]);
 
-  /* ── Parallax hero ── */
+  /* parallax */
   useEffect(() => {
     if (phase !== "done") return;
     const onScroll = () => {
@@ -99,7 +216,6 @@ export default function WeddingInvitation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [phase]);
 
-  /* ── Envelope sequence ── */
   const handleOpen = () => {
     if (phase !== "idle") return;
     setPhase("cracking");
@@ -115,9 +231,7 @@ export default function WeddingInvitation() {
 
   return (
     <div className={styles.mainContainer}>
-      {/* ══════════════════════════
-          FLOATING MUSIC BUTTON
-      ══════════════════════════ */}
+      {/* MUSIC BTN */}
       {isIntroGone && (
         <button
           className={`${styles.musicBtn} ${playing ? styles.musicPlaying : ""}`}
@@ -139,23 +253,31 @@ export default function WeddingInvitation() {
         </button>
       )}
 
-      {/* ══════════════════════════
-          INTRO OVERLAY
-      ══════════════════════════ */}
+      {/* LANGUAGE TOGGLE */}
+      {isIntroGone && (
+        <button
+          className={styles.langBtn}
+          onClick={() => setLang((l) => (l === "en" ? "hy" : "en"))}
+        >
+          {t.langToggle}
+        </button>
+      )}
+
+      {/* ══════════ INTRO OVERLAY ══════════ */}
       {!isIntroGone && (
         <div
           className={`${styles.introOverlay} ${phase === "revealing" ? styles.curtainSplit : ""}`}
         >
-          {/* curtain panels */}
           <div className={`${styles.curtainPanel} ${styles.curtainLeft}`} />
           <div className={`${styles.curtainPanel} ${styles.curtainRight}`} />
 
-          {/* floating petals */}
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-            <div key={n} className={`${styles.petal} ${styles[`petal${n}`]}`} />
+          {[0, 1, 2, 3, 4, 5, 6, 7].map((n) => (
+            <div
+              key={n}
+              className={`${styles.petal} ${styles[`petal${n + 1}`]}`}
+            />
           ))}
 
-          {/* ── envelope ── */}
           <div
             className={[
               styles.envelope,
@@ -168,13 +290,9 @@ export default function WeddingInvitation() {
             <div className={styles.envBack} />
             <div className={styles.envFoldLeft} />
             <div className={styles.envFoldRight} />
-
-            {/* flap */}
             <div className={styles.flap}>
               <div className={styles.flapShading} />
             </div>
-
-            {/* wax seal */}
             <div
               className={`${styles.waxSeal} ${phase === "cracking" ? styles.sealBreak : ""}`}
             >
@@ -184,13 +302,11 @@ export default function WeddingInvitation() {
               <div className={styles.sealCrack2} />
               <div className={styles.sealCrack3} />
             </div>
-
-            {/* letter */}
             <div className={styles.letterPreview}>
               <div className={styles.paperLines} />
               <div className={styles.letterInner}>
                 <div className={styles.letterOrnament}>✦</div>
-                <span className={styles.label}>You are invited</span>
+                <span className={styles.label}>You are cordially invited</span>
                 <div className={styles.letterRule} />
                 <h2 className={styles.scriptName}>Aram &amp; Eliz</h2>
                 <div className={styles.letterRule} />
@@ -202,7 +318,6 @@ export default function WeddingInvitation() {
                 <div className={styles.letterOrnament}>✦</div>
               </div>
             </div>
-
             <div className={styles.pocket} />
           </div>
 
@@ -212,9 +327,7 @@ export default function WeddingInvitation() {
         </div>
       )}
 
-      {/* ══════════════════════════
-          MAIN CONTENT
-      ══════════════════════════ */}
+      {/* ══════════ MAIN CONTENT ══════════ */}
       <main
         className={`${styles.mainContent} ${isIntroGone ? styles.mainVisible : ""}`}
       >
@@ -230,57 +343,54 @@ export default function WeddingInvitation() {
           </div>
           <div className={styles.heroOverlay} />
           <div className={styles.heroContent}>
-            <p className={styles.eyebrow}>May 26 · 2026 · Yerevan</p>
+            <p className={styles.eyebrow}>{t.eyebrow}</p>
             <h1 className={styles.mainTitle}>Aram &amp; Eliz</h1>
             <div className={styles.heroDivider} />
-            <p className={styles.heroDescription}>
-              Join us for a day of love, laughter, and celebration
-            </p>
+            <p className={styles.heroDescription}>{t.heroDesc}</p>
             <div className={styles.heroScroll}>
               <span />
             </div>
           </div>
         </section>
 
-        {/* COUNTDOWN */}
+        {/* COUNTDOWN — stable index keys, never remounted */}
         <section
           className={`${styles.countdownSection} ${styles.revealSection}`}
         >
-          <span className={styles.accentLabel}>Until the Big Day</span>
+          <span className={`${styles.accentLabel} ${styles.accentLabelLight}`}>
+            {t.countdownLabel}
+          </span>
           <div className={styles.countdownGrid}>
-            {[
-              { v: countdown.days, l: "Days" },
-              { v: countdown.hours, l: "Hours" },
-              { v: countdown.minutes, l: "Minutes" },
-              { v: countdown.seconds, l: "Seconds" },
-            ].map(({ v, l }, i) => (
+            {[0, 1, 2, 3].map((i) => (
               <div
-                key={l}
-                className={`${styles.countdownItem} ${styles.revealSection}`}
+                key={i} /* ← stable numeric key */
+                className={styles.countdownItem}
                 style={{ "--delay": `${i * 0.08}s` }}
               >
                 <span className={styles.countdownNumber}>
-                  {String(v).padStart(2, "0")}
+                  {String(cdValues[i]).padStart(2, "0")}
                 </span>
                 <span className={styles.countdownSep} />
-                <span className={styles.countdownLabel}>{l}</span>
+                <span className={styles.countdownLabel}>{t.cdUnits[i]}</span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* GALLERYYY */}
+        {/* DRESS CODE STRIP */}
+        
+
+        {/* GALLERY */}
         <section className={`${styles.section} ${styles.revealSection}`}>
-          <span className={styles.accentLabel}>Our Moments</span>
-          <h2 className={styles.sectionTitle}>Captured Love</h2>
+          <span className={styles.accentLabel}>{t.momentsLabel}</span>
+          <h2 className={styles.sectionTitle}>{t.momentsTitle}</h2>
           <div className={styles.gallery} onContextMenu={preventSave}>
             {["/3.JPG", "/4.jpg", "/5.JPG"].map((src, i) => (
               <div
-                key={src}
+                key={i} /* ← stable numeric key */
                 className={[
                   styles.photoWrapper,
                   i === 2 ? styles.photoLarge : "",
-                  styles.revealSection,
                 ].join(" ")}
                 style={{ "--delay": `${i * 0.14}s` }}
               >
@@ -291,65 +401,108 @@ export default function WeddingInvitation() {
           </div>
         </section>
 
-        {/* DETAILS */}
+        {/* DETAILS — stable index keys */}
         <section className={`${styles.detailsSection} ${styles.revealSection}`}>
+          <span className={styles.accentLabel}>{t.detailsLabel}</span>
+          <h2 className={styles.sectionTitleDark}>{t.detailsTitle}</h2>
           <div className={styles.detailsGrid}>
-            {[
-              {
-                icon: "◇",
-                head: "When",
-                lines: ["Thursday, May 26", "16:00 Ceremony"],
-              },
-              {
-                icon: "◇",
-                head: "Where",
-                lines: ["Lazur Restaurant", "Yerevan, Armenia"],
-              },
-              {
-                icon: "◇",
-                head: "Schedule",
-                lines: ["16:00 — Ceremony", "17:30 — Dinner & Dance"],
-              },
-            ].map(({ icon, head, lines }, i) => (
-              <div
-                key={head}
-                className={`${styles.detailCard} ${styles.revealSection}`}
-                style={{ "--delay": `${i * 0.1}s` }}
-              >
-                <div className={styles.detailIcon}>{icon}</div>
-                <h3>{head}</h3>
-                {lines.map((l) => (
-                  <p key={l}>{l}</p>
-                ))}
-              </div>
-            ))}
+            {t.cards.map((card, i) => {
+              const Icon = CARD_ICONS[i];
+              return (
+                <div
+                  key={i} /* ← stable numeric key */
+                  className={styles.detailCard}
+                >
+                  <div className={styles.detailCardTop}>
+                    <div className={styles.detailIconCircle}>
+                      <Icon size={22} />
+                    </div>
+                    <h3 className={styles.detailHead}>{card.head}</h3>
+                  </div>
+                  <div className={styles.detailCardBody}>
+                    {card.lines.map((line, j) => (
+                      <p
+                        key={j}
+                        className={
+                          j === 0 ? styles.detailLine1 : styles.detailLine
+                        }
+                      >
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                  <p className={styles.detailSub}>
+                    <BsSuitHeart
+                      size={10}
+                      style={{ marginRight: 6, opacity: 0.5 }}
+                    />
+                    {card.sub}
+                  </p>
+                </div>
+              );
+            })}
           </div>
+
           <div className={styles.screenshotAction}>
             <button
               className={styles.primaryButton}
               onClick={() => setShowModal(true)}
             >
-              Save the Details
+              {t.saveDetails}
             </button>
-            <p className={styles.buttonHint}>
-              Opens details to screenshot
-            </p>
+          </div>
+        </section>
+
+        {/* RSVP — no nested revealSection children */}
+        <section className={`${styles.rsvpSection} ${styles.revealSection}`}>
+          <div className={styles.rsvpTopRule}>
+            <span />
+            <span className={styles.rsvpRuleDiamond}>◆</span>
+            <span />
+          </div>
+
+          <LuCalendarHeart size={38} className={styles.rsvpBigIcon} />
+          <span className={styles.accentLabel}>{t.rsvpLabel}</span>
+          <h2 className={styles.sectionTitle}>{t.rsvpTitle}</h2>
+
+          <div className={styles.rsvpDeadlineBadge}>
+            <BsCalendar3 size={13} />
+            <span>{t.rsvpDeadline}</span>
+          </div>
+
+          <p className={styles.rsvpBody}>
+            {t.rsvpBody.split("\n").map((line, i) => (
+              <span key={i}>
+                {line}
+                {i === 0 && <br />}
+              </span>
+            ))}
+          </p>
+
+          <a href="tel:+37410052026" className={styles.rsvpPhoneLink}>
+            <BsTelephone size={18} />
+            <span>+374 10 052 026</span>
+          </a>
+
+
+          <div className={styles.rsvpTopRule} style={{ marginTop: "3.5rem" }}>
+            <span />
+            <span className={styles.rsvpRuleDiamond}>◆</span>
+            <span />
           </div>
         </section>
 
         {/* FOOTER */}
         <footer className={`${styles.footer} ${styles.revealSection}`}>
           <div className={styles.footerDivider} />
-          <h2 className={styles.footerScript}>
-            We can't wait to celebrate with you
-          </h2>
+          <BsSuitHeartFill size={14} className={styles.footerHeart} />
+          <h2 className={styles.footerScript}>{t.footerScript}</h2>
           <p className={styles.footerDate}>26 · 05 · 2026</p>
+          <p className={styles.footerNames}>Aram &amp; Eliz</p>
         </footer>
       </main>
 
-      {/* ══════════════════════════
-          SCREENSHOT MODAL
-      ══════════════════════════ */}
+      {/* SCREENSHOT MODAL */}
       {showModal && (
         <div className={styles.screenshotModal}>
           <button
@@ -372,17 +525,19 @@ export default function WeddingInvitation() {
               className={styles.divider}
               style={{ background: "#b39359", margin: "20px auto" }}
             />
-            <p className={styles.modalSubtitle}>Thursday · May 26 · 2026</p>
+            <p className={styles.modalSubtitle}>Tuesday · May 26 · 2026</p>
             <div className={styles.modalDetails}>
               <h3>Location</h3>
               <p>Lazur Restaurant</p>
               <p>Yerevan, Armenia</p>
-              <h3 style={{ marginTop: "28px" }}>Schedule</h3>
+              <h3 style={{ marginTop: "24px" }}>Schedule</h3>
               <p>16:00 — Ceremony</p>
               <p>17:30 — Dinner &amp; Party</p>
+              <h3 style={{ marginTop: "24px" }}>RSVP by</h3>
+              <p>May 10, 2026</p>
             </div>
             <p className={styles.screenshotHint}>
-              Take a screenshot to save
+              Take a screenshot
             </p>
           </div>
         </div>
