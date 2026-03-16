@@ -306,7 +306,7 @@ export default function WeddingInvitation() {
               <div className={styles.paperLines} />
               <div className={styles.letterInner}>
                 <div className={styles.letterOrnament}>✦</div>
-                <span className={styles.label}>You are cordially invited</span>
+                <span className={styles.label}>You are invited</span>
                 <div className={styles.letterRule} />
                 <h2 className={styles.scriptName}>Aram &amp; Eliz</h2>
                 <div className={styles.letterRule} />
