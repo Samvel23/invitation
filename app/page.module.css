@@ -799,10 +799,10 @@
 .countdownSection {
   padding: 6rem 2rem 5rem;
   text-align: center;
-  background: var(--dark);
+  background: var(--cream-dark);
 }
 .accentLabelLight {
-  color: var(--gold) !important;
+  color: var(--dark) !important;
   opacity: 0.8;
 }
 .countdownGrid {
@@ -827,7 +827,7 @@
   font-family: "Cormorant Garamond", serif;
   font-size: clamp(3rem, 8vw, 5.5rem);
   font-weight: 300;
-  color: var(--gold-light);
+  color: var(--dark);
   line-height: 1;
   letter-spacing: -2px;
 }
@@ -835,7 +835,7 @@
   display: block;
   width: 20px;
   height: 1px;
-  background: rgba(179, 147, 89, 0.35);
+  background: var(--dark);
   margin: 12px auto;
 }
 .countdownLabel {
@@ -844,7 +844,7 @@
   font-size: 0.6rem;
   letter-spacing: 4px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--dark)
 }
 
 /* ════════════════════════════════════════════
